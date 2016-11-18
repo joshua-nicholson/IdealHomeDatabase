@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.Properties;
 import java.util.Scanner;
+import java.sql.DatabaseMetaData;
+
 
 /**
  * Created by jwnicholson on 11/18/2016.
@@ -10,10 +12,12 @@ public class Main
     public static final int MYSQL_DUPLICATE_PK = 1062;
     public static final int MYSQL_TABLE_DOES_NOT_EXIST = 1146;
     public static final int MYSQL_COLUMN_DOES_NOT_EXIST = 1054;
+    public static final int MYSQL_TRUNCATED_INCORRECT_DOUBLE_VALUE = 1292;
     public static void main (String [] args)
     {
         Connection con = null;
         Statement stmt = null;
+        DatabaseMetaData metadata = null;
         int choice = 0;
         Scanner scan = new Scanner(System.in);
         try {
@@ -21,6 +25,14 @@ public class Main
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        try {
+            metadata = con.getMetaData();
+        } catch (SQLException e) {
+            System.err.println("There was an error getting the metadata: "
+                    + e.getMessage());
+        }
+
+
 
         while(choice != 1)
         {
@@ -75,20 +87,47 @@ public class Main
                             String table = scan.nextLine();
                             System.out.println("WHERE ");
                             String column = scan.nextLine();
-                            System.out.println(" = (remember to surround data with ' '");
+                            System.out.println(" = ");
                             String value = scan.nextLine();
 
-                            query = "DELETE FROM " + table + " WHERE "+column+ "="+value;
+                            query = "DELETE FROM " + table + " WHERE "+column+ "="+ "'" +value+ "'" ; //added those single quotation marks on value so that the user doesn't have to.
                             stmt.executeUpdate(query);
+                            System.out.println("Deletion Successful \n");
 
-                        } catch (SQLException e) {
+                        } //end try
+
+                        catch (SQLException e) {
+                            if(e.getErrorCode() == MYSQL_TABLE_DOES_NOT_EXIST)
+                                System.out.println("The table you entered does not exist.");
+                            else if(e.getErrorCode() == MYSQL_COLUMN_DOES_NOT_EXIST)
+                                System.out.println("The column you attempted to delete does not exist. You may have formatted your values improperly.");
+                            else if(e.getErrorCode() == MYSQL_TRUNCATED_INCORRECT_DOUBLE_VALUE)
+                                System.out.println("The value you have entered may not have been formatted correctly");
+                            System.out.println(e.getErrorCode());
                             e.printStackTrace();
+                        } //end catch
+                        break;
+                case 5:
+                        try{
+                            System.out.println("Database Product Name: " + metadata.getDatabaseProductName());
+                            System.out.println("Database Product Version: "+ metadata.getDatabaseProductVersion());
+                            System.out.println("Logged User: " + metadata.getUserName());
+                            System.out.println("JDBC Driver: " + metadata.getDriverName());
+                            System.out.println("Driver Version: " + metadata.getDriverVersion());
+                            System.out.println("\n");
+                        }
+                        catch(SQLException e)
+                        {
+
                         }
                         break;
 
 
             }
-        }
-    }
 
-}
+
+            } //end switch
+        } //end while loop
+    }// end main
+
+
