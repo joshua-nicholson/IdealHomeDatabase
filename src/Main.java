@@ -66,6 +66,27 @@ public class Main
                         System.out.println(e.getErrorCode());
                         e.printStackTrace();
                     }
+                    break;
+                case 4:
+                        try {
+
+                            stmt = con.createStatement();
+                            System.out.println("DELETE FROM ");
+                            String table = scan.nextLine();
+                            System.out.println("WHERE ");
+                            String column = scan.nextLine();
+                            System.out.println(" = (remember to surround data with ' '");
+                            String value = scan.nextLine();
+
+                            query = "DELETE FROM " + table + " WHERE "+column+ "="+value;
+                            stmt.executeUpdate(query);
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+
+
             }
         }
     }
