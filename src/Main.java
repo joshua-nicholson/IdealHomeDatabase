@@ -19,7 +19,14 @@ public class Main
         Statement stmt = null;
         DatabaseMetaData metadata = null;
         int choice = 0;
+        String query;
+        String table;
+        String conditions;
         Scanner scan = new Scanner(System.in);
+        String[] inputValues;
+        String values = "";
+
+
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/idealhome", "root", "root");
         } catch (SQLException e) {
@@ -43,40 +50,73 @@ public class Main
                 case 1:
                     break;
                 case 2:
-                    System.out.println("Enter your SQL query:");
-                    String query = scan.nextLine();
+                    System.out.println("What table do you wish to query?");
+                    table = scan.nextLine();
+                    System.out.println("How many values do you wish to query? If you wish to query all values, type 0.");
+                    int numOfValues = Integer.parseInt(scan.nextLine());
+                    if(numOfValues != 0)
+                    {
+                        inputValues = new String[numOfValues];
+                        System.out.println("What values do you wish to query? Type one value at a time and then push enter. Continue until you have typed all values.");
+                        for(int i = 0; i < inputValues.length; i++)
+                            inputValues[i] = scan.nextLine();
+                        for(int i = 0; i < inputValues.length; i++)
+                        {
+                          if(i < inputValues.length - 1)
+                              values += inputValues[i] + " AND ";
+                          else
+                              values += inputValues[i];
+                        }
+                    }
+                    else
+                    {
+                        values = "*";
+                    }
+                    System.out.println("Do you want to use a WHERE clause? (Y/N)");
+                    String userResponse = scan.nextLine();
+                    if(userResponse.equalsIgnoreCase("Y"))
+                    {
+                        System.out.println("Type the conditions for your WHERE clause, excluding the keyword WHERE.");
+                        conditions = scan.nextLine();
+                        query = "SELECT " + values + " FROM " + table + " WHERE " + conditions + ";";
+                        System.out.println(query);
+                    }
+                    else
+                        query = "SELECT " + values + " FROM " + table + ";";
+
                     try {
                         stmt = con.createStatement();
                         ResultSet rs = stmt.executeQuery(query);
                         while (rs.next())
                         {
-
+                                int numCols = rs.getMetaData().getColumnCount();
+                                for(int i = 1; i <= numCols; i++)
+                                    System.out.println("Column " + i + " = " +  rs.getObject(i));
                         }
 
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+                    values = "";
                     break;
                 case 3:
                     try {
                         stmt = con.createStatement();
                         System.out.println("Enter the table you wish to insert data into. (Case sensitive)");
-                        String table = scan.nextLine();
+                        table = scan.nextLine();
                         System.out.println("Enter all applicable information separated by commas and make sure VARCHAR variables are surrounded by single quotation marks.");
-                        String values = scan.nextLine();
+                        values = scan.nextLine();
                         query = "INSERT INTO " + table + " VALUES (" + values + ")";
                         stmt.executeUpdate(query);
                     } catch (SQLException e) {
                         if(e.getErrorCode() == MYSQL_DUPLICATE_PK )
-                        {
                             System.out.println("Insertion fail because a tuple with the same primary key already exists.");
-                        }
                         else if(e.getErrorCode() == MYSQL_TABLE_DOES_NOT_EXIST)
                             System.out.println("The table you entered does not exist.");
                         else if(e.getErrorCode() == MYSQL_COLUMN_DOES_NOT_EXIST)
                             System.out.println("The column you attempted to insert data into does not exist. You may have formatted your values improperly.");
-                        System.out.println(e.getErrorCode());
-                        e.printStackTrace();
+                        else
+                            e.printStackTrace();
                     }
                     break;
                 case 4:
@@ -84,7 +124,7 @@ public class Main
 
                             stmt = con.createStatement();
                             System.out.println("DELETE FROM ");
-                            String table = scan.nextLine();
+                            table = scan.nextLine();
                             System.out.println("WHERE ");
                             String column = scan.nextLine();
                             System.out.println(" = ");
