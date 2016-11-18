@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="MySQL - @localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="2.6">
+    <schema id="1" name="idealhome">
+      <visible>1</visible>
+    </schema>
+    <schema id="2" name="information_schema"/>
+    <schema id="3" name="mysql"/>
+    <schema id="4" name="performance_schema"/>
+    <schema id="5" name="sale"/>
+    <schema id="6" name="sys"/>
+    <table id="7" parent="1" name="branch"/>
+    <table id="8" parent="1" name="client"/>
+    <table id="9" parent="1" name="customer"/>
+    <table id="10" parent="1" name="item"/>
+    <table id="11" parent="1" name="order_"/>
+    <table id="12" parent="1" name="order_item"/>
+    <table id="13" parent="1" name="privateowner"/>
+    <table id="14" parent="1" name="propertyforrent"/>
+    <table id="15" parent="1" name="registration"/>
+    <table id="16" parent="1" name="shipment"/>
+    <table id="17" parent="1" name="staff"/>
+    <table id="18" parent="1" name="viewing"/>
+    <table id="19" parent="1" name="warehouse"/>
+    <column id="20" parent="7" name="branchNo">
+      <mandatory>1</mandatory>
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="21" parent="7" name="street">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="22" parent="7" name="city">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="23" parent="7" name="postcode">
+      <data-type>varchar(8)|0</data-type>
+    </column>
+    <key id="24" parent="7" name="PRIMARY">
+      <columns>branchNo</columns>
+      <primary>1</primary>
+    </key>
+    <column id="25" parent="8" name="clientNo">
+      <mandatory>1</mandatory>
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="26" parent="8" name="fName">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="27" parent="8" name="lName">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="28" parent="8" name="telNo">
+      <data-type>varchar(13)|0</data-type>
+    </column>
+    <column id="29" parent="8" name="prefType">
+      <data-type>varchar(5)|0</data-type>
+    </column>
+    <column id="30" parent="8" name="maxRent">
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="31" parent="8" name="eMail">
+      <data-type>varchar(30)|0</data-type>
+    </column>
+    <key id="32" parent="8" name="PRIMARY">
+      <columns>clientNo</columns>
+      <primary>1</primary>
+    </key>
+    <column id="33" parent="9" name="Custnum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="34" parent="9" name="Cname">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="35" parent="9" name="city">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="36" parent="9" name="phone">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="37" parent="9" name="email">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <key id="38" parent="9" name="PRIMARY">
+      <columns>Custnum</columns>
+      <primary>1</primary>
+    </key>
+    <column id="39" parent="10" name="Itemnum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="40" parent="10" name="Iname">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="41" parent="10" name="Description">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="42" parent="10" name="Category">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="43" parent="10" name="Unit_price">
+      <data-type>decimal(6,2)|0</data-type>
+    </column>
+    <key id="44" parent="10" name="PRIMARY">
+      <columns>Itemnum</columns>
+      <primary>1</primary>
+    </key>
+    <column id="45" parent="11" name="Ordernum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="46" parent="11" name="Orderdate">
+      <data-type>date|0</data-type>
+    </column>
+    <column id="47" parent="11" name="Custnum">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="48" parent="11" name="Payment">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <key id="49" parent="11" name="PRIMARY">
+      <columns>Ordernum</columns>
+      <primary>1</primary>
+    </key>
+    <column id="50" parent="12" name="Ordernum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="51" parent="12" name="Itemnum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="52" parent="12" name="Qty">
+      <data-type>int(11)|0</data-type>
+    </column>
+    <key id="53" parent="12" name="PRIMARY">
+      <columns>Ordernum
+Itemnum</columns>
+      <primary>1</primary>
+    </key>
+    <column id="54" parent="13" name="ownerNo">
+      <mandatory>1</mandatory>
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="55" parent="13" name="fName">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="56" parent="13" name="lName">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="57" parent="13" name="address">
+      <data-type>varchar(50)|0</data-type>
+    </column>
+    <column id="58" parent="13" name="telNo">
+      <data-type>varchar(13)|0</data-type>
+    </column>
+    <column id="59" parent="13" name="eMail">
+      <data-type>varchar(30)|0</data-type>
+    </column>
+    <column id="60" parent="13" name="password">
+      <data-type>varchar(30)|0</data-type>
+    </column>
+    <key id="61" parent="13" name="PRIMARY">
+      <columns>ownerNo</columns>
+      <primary>1</primary>
+    </key>
+    <column id="62" parent="14" name="propertyNo">
+      <mandatory>1</mandatory>
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="63" parent="14" name="street">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="64" parent="14" name="city">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="65" parent="14" name="postcode">
+      <data-type>varchar(8)|0</data-type>
+    </column>
+    <column id="66" parent="14" name="type">
+      <data-type>varchar(5)|0</data-type>
+    </column>
+    <column id="67" parent="14" name="rooms">
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="68" parent="14" name="rent">
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="69" parent="14" name="ownerNo">
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="70" parent="14" name="staffNo">
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="71" parent="14" name="branchNo">
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <index id="72" parent="14" name="branchNo">
+      <columns>branchNo</columns>
+      <desc-columns></desc-columns>
+    </index>
+    <index id="73" parent="14" name="ownerNo">
+      <columns>ownerNo</columns>
+      <desc-columns></desc-columns>
+    </index>
+    <index id="74" parent="14" name="staffNo">
+      <columns>staffNo</columns>
+      <desc-columns></desc-columns>
+    </index>
+    <key id="75" parent="14" name="PRIMARY">
+      <columns>propertyNo</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="76" parent="14" name="propertyforrent_ibfk_1">
+      <columns>ownerNo</columns>
+      <ref-key>~.privateowner.PRIMARY</ref-key>
+      <cascade-update-rule>restrict</cascade-update-rule>
+      <cascade-delete-rule>restrict</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="77" parent="14" name="propertyforrent_ibfk_2">
+      <columns>staffNo</columns>
+      <ref-key>~.staff.PRIMARY</ref-key>
+      <cascade-update-rule>restrict</cascade-update-rule>
+      <cascade-delete-rule>restrict</cascade-delete-rule>
+    </foreign-key>
+    <foreign-key id="78" parent="14" name="propertyforrent_ibfk_3">
+      <columns>branchNo</columns>
+      <ref-key>~.branch.PRIMARY</ref-key>
+      <cascade-update-rule>restrict</cascade-update-rule>
+      <cascade-delete-rule>restrict</cascade-delete-rule>
+    </foreign-key>
+    <column id="79" parent="15" name="clientNo">
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="80" parent="15" name="branchNo">
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="81" parent="15" name="staffNo">
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="82" parent="15" name="dateJoined">
+      <data-type>varchar(9)|0</data-type>
+    </column>
+    <column id="83" parent="16" name="Ordernum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="84" parent="16" name="Warehousenum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="85" parent="16" name="Ship_date">
+      <data-type>date|0</data-type>
+    </column>
+    <key id="86" parent="16" name="PRIMARY">
+      <columns>Ordernum
+Warehousenum</columns>
+      <primary>1</primary>
+    </key>
+    <column id="87" parent="17" name="staffNo">
+      <mandatory>1</mandatory>
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="88" parent="17" name="fName">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="89" parent="17" name="lName">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="90" parent="17" name="position">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <column id="91" parent="17" name="sex">
+      <data-type>char(1)|0</data-type>
+    </column>
+    <column id="92" parent="17" name="DOB">
+      <data-type>varchar(9)|0</data-type>
+    </column>
+    <column id="93" parent="17" name="salary">
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="94" parent="17" name="branchNo">
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <index id="95" parent="17" name="branchNo">
+      <columns>branchNo</columns>
+      <desc-columns></desc-columns>
+    </index>
+    <key id="96" parent="17" name="PRIMARY">
+      <columns>staffNo</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="97" parent="17" name="staff_ibfk_1">
+      <columns>branchNo</columns>
+      <ref-key>~.branch.PRIMARY</ref-key>
+      <cascade-update-rule>restrict</cascade-update-rule>
+      <cascade-delete-rule>restrict</cascade-delete-rule>
+    </foreign-key>
+    <column id="98" parent="18" name="clientNo">
+      <mandatory>1</mandatory>
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="99" parent="18" name="propertyNo">
+      <mandatory>1</mandatory>
+      <data-type>varchar(4)|0</data-type>
+    </column>
+    <column id="100" parent="18" name="viewDate">
+      <data-type>varchar(9)|0</data-type>
+    </column>
+    <column id="101" parent="18" name="comment">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <key id="102" parent="18" name="PRIMARY">
+      <columns>clientNo
+propertyNo</columns>
+      <primary>1</primary>
+    </key>
+    <foreign-key id="103" parent="18" name="viewing_ibfk_1">
+      <columns>clientNo</columns>
+      <ref-key>~.client.PRIMARY</ref-key>
+      <cascade-update-rule>restrict</cascade-update-rule>
+      <cascade-delete-rule>restrict</cascade-delete-rule>
+    </foreign-key>
+    <column id="104" parent="19" name="Warehousenum">
+      <mandatory>1</mandatory>
+      <data-type>int(11)|0</data-type>
+    </column>
+    <column id="105" parent="19" name="City">
+      <data-type>varchar(20)|0</data-type>
+    </column>
+    <key id="106" parent="19" name="PRIMARY">
+      <columns>Warehousenum</columns>
+      <primary>1</primary>
+    </key>
+  </database-model>
+</dataSource>
