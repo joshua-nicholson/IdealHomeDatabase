@@ -4,15 +4,13 @@ import java.util.Scanner;
 import java.sql.DatabaseMetaData;
 
 
-/**
- * Created by jwnicholson on 11/18/2016.
- */
 public class Main
 {
     public static final int MYSQL_DUPLICATE_PK = 1062;
     public static final int MYSQL_TABLE_DOES_NOT_EXIST = 1146;
     public static final int MYSQL_COLUMN_DOES_NOT_EXIST = 1054;
     public static final int MYSQL_TRUNCATED_INCORRECT_DOUBLE_VALUE = 1292;
+    public static final int MYSQL_DATABASE_ALREADY_EXISTS = 1007;
     public static void main (String [] args)
     {
         Connection con = null;
@@ -28,7 +26,7 @@ public class Main
 
 
         try {
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/idealhome", "root", "root");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -38,8 +36,101 @@ public class Main
             System.err.println("There was an error getting the metadata: "
                     + e.getMessage());
         }
+        System.out.println("What is the name of the database you wish to create?");
+        String database = scan.nextLine();
+        String sql = "CREATE DATABASE " + database;
 
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+           if(e.getErrorCode() == MYSQL_DATABASE_ALREADY_EXISTS)
+               System.out.println("A database with this name already exists.");
+        }
 
+        try {
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + database, "root", "root");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String createStaff = "CREATE TABLE Staff("
+            + "staffNo VARCHAR(4),"
+            + "fName VARCHAR(20),"
+            + "lName VARCHAR(20),"
+            + "position VARCHAR(20),"
+            + "salary INT,"
+            + "PRIMARY KEY(staffNo))";
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(createStaff);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String createClient = "CREATE TABLE Client("
+            + "clientNo VARCHAR(4),"
+            + "fName VARCHAR(20),"
+            + "lName VARCHAR(20),"
+            + "telNo VARCHAR(13),"
+            + "maxRent INT,"
+            + "PRIMARY KEY(clientNo))";
+
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(createClient);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String createPrivateOwner = "CREATE TABLE PrivateOwner("
+            + "ownerNo VARCHAR(4),"
+            + "fName VARCHAR(20),"
+            + "lName VARCHAR(20),"
+            + "telNo VARCHAR(13),"
+            + "PRIMARY KEY(ownerNo))";
+
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(createPrivateOwner);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String createPropertyForRent = "CREATE TABLE PropertyForRent("
+            + "propertyNo VARCHAR(4),"
+            + "street VARCHAR(20),"
+            + "city VARCHAR(20),"
+            + "postcode VARCHAR(8),"
+            + "rent INT,"
+            + "ownerNo VARCHAR(4),"
+            + "staffNo VARCHAR(4),"
+            + "PRIMARY KEY(propertyNo),"
+            + "FOREIGN KEY(ownerNo) REFERENCES PrivateOwner(ownerNo),"
+            + "FOREIGN KEY(staffNo) REFERENCES Staff(staffNo))";
+
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(createPropertyForRent);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        String createViewing = "CREATE TABLE Viewing("
+            + "clientNo VARCHAR(4),"
+            + "propertyNo VARCHAR(4),"
+            + "viewDate VARCHAR(9),"
+            + "comment VARCHAR(20),"
+            + "PRIMARY KEY(clientNo, propertyNo),"
+            + "FOREIGN KEY(clientNo) REFERENCES Client(clientNo))";
+
+        try {
+            stmt = con.createStatement();
+            stmt.executeUpdate(createViewing);
+        } catch (SQLException e) {
+            if(e.getErrorCode() == MYSQL_DATABASE_ALREADY_EXISTS)
+                System.out.println("A database with this name already exists.");
+        }
 
         while(choice != 1)
         {
