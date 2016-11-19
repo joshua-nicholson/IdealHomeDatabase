@@ -11,6 +11,7 @@ public class Main
     public static final int MYSQL_COLUMN_DOES_NOT_EXIST = 1054;
     public static final int MYSQL_TRUNCATED_INCORRECT_DOUBLE_VALUE = 1292;
     public static final int MYSQL_DATABASE_ALREADY_EXISTS = 1007;
+    public static final int MySQL_Integrity_Constraint_ViolationException = 1451; // Foreign Key Issue
     public static void main (String [] args)
     {
         Connection con = null;
@@ -228,7 +229,34 @@ public class Main
                         } //end try
 
                         catch (SQLException e) {
-                            if(e.getErrorCode() == MYSQL_TABLE_DOES_NOT_EXIST)
+                           if (e.getErrorCode() == MySQL_Integrity_Constraint_ViolationException) {
+
+                               System.out.println("That is a foreign key, if you would like to delete it type y.");
+                               String UserResponse = scan.nextLine();
+                               if (UserResponse.equalsIgnoreCase("Y"))
+                               {
+                                   try {
+                                       stmt.executeUpdate("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;");
+                                       System.out.println("DELETE FROM ");
+                                       table = scan.nextLine();
+                                       System.out.println("WHERE ");
+                                       String column = scan.nextLine();
+                                       System.out.println(" = ");
+                                       String value = scan.nextLine();
+
+                                       query = "DELETE FROM " + table + " WHERE "+column+ "="+ "'" +value+ "'" ; //added those single quotation marks on value so that the user doesn't have to.
+                                       stmt.executeUpdate(query);
+                                       System.out.println("Deletion Successful \n");
+                                       stmt.executeUpdate("SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;");
+
+
+                                   } catch (SQLException e1) {
+                                       e1.printStackTrace();
+                                   }
+                               }
+                               else break;
+                           }
+                            else if(e.getErrorCode() == MYSQL_TABLE_DOES_NOT_EXIST)
                                 System.out.println("The table you entered does not exist.");
                             else if(e.getErrorCode() == MYSQL_COLUMN_DOES_NOT_EXIST)
                                 System.out.println("The column you attempted to delete does not exist. You may have formatted your values improperly.");
@@ -237,7 +265,8 @@ public class Main
                             System.out.println(e.getErrorCode());
                             e.printStackTrace();
                         } //end catch
-                        break;
+                    break;
+
                 case 5:
                         try{
                             System.out.println("Database Product Name: " + metadata.getDatabaseProductName());
@@ -249,7 +278,7 @@ public class Main
                         }
                         catch(SQLException e)
                         {
-
+                            e.printStackTrace();
                         }
                         break;
 
