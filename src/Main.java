@@ -13,6 +13,7 @@ public class Main
     public static final int MYSQL_DATABASE_ALREADY_EXISTS = 1007;
     public static void main (String [] args)
     {
+        //Global variables created
         Connection con = null;
         Statement stmt = null;
         DatabaseMetaData metadata = null;
@@ -25,6 +26,7 @@ public class Main
         String values = "";
 
 
+        //initial connection is setup to the MySQL server
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "root");
         } catch (SQLException e) {
@@ -36,10 +38,12 @@ public class Main
             System.err.println("There was an error getting the metadata: "
                     + e.getMessage());
         }
+        //Creates a database using user input
         System.out.println("What is the name of the database you wish to create?");
         String database = scan.nextLine();
         String sql = "CREATE DATABASE " + database;
 
+        //Checks to see if the database already exists
         try {
             stmt = con.createStatement();
             stmt.executeUpdate(sql);
@@ -48,12 +52,14 @@ public class Main
                System.out.println("A database with this name already exists.");
         }
 
+        //modifies the connection so it points to the newly created database
         try {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + database, "root", "root");
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        //The SQL statement to create the Staff table with proper relations is prepared
         String createStaff = "CREATE TABLE Staff("
             + "staffNo VARCHAR(4),"
             + "fName VARCHAR(20),"
@@ -61,6 +67,8 @@ public class Main
             + "position VARCHAR(20),"
             + "salary INT,"
             + "PRIMARY KEY(staffNo))";
+
+        //The above SQL statement is executed
         try {
             stmt = con.createStatement();
             stmt.executeUpdate(createStaff);
@@ -68,6 +76,7 @@ public class Main
             e.printStackTrace();
         }
 
+        //The SQL statement to create the Client table with proper relations is prepared
         String createClient = "CREATE TABLE Client("
             + "clientNo VARCHAR(4),"
             + "fName VARCHAR(20),"
@@ -76,6 +85,7 @@ public class Main
             + "maxRent INT,"
             + "PRIMARY KEY(clientNo))";
 
+        //The above SQL statement is executed
         try {
             stmt = con.createStatement();
             stmt.executeUpdate(createClient);
@@ -83,6 +93,7 @@ public class Main
             e.printStackTrace();
         }
 
+        //The SQL statement to create the PrivateOwner table with proper relations is prepared
         String createPrivateOwner = "CREATE TABLE PrivateOwner("
             + "ownerNo VARCHAR(4),"
             + "fName VARCHAR(20),"
@@ -90,6 +101,7 @@ public class Main
             + "telNo VARCHAR(13),"
             + "PRIMARY KEY(ownerNo))";
 
+        //The above SQL statement is executed
         try {
             stmt = con.createStatement();
             stmt.executeUpdate(createPrivateOwner);
@@ -97,6 +109,7 @@ public class Main
             e.printStackTrace();
         }
 
+        //The SQL statement to create the PropertyForRent table with proper relations is prepared
         String createPropertyForRent = "CREATE TABLE PropertyForRent("
             + "propertyNo VARCHAR(4),"
             + "street VARCHAR(20),"
@@ -109,6 +122,7 @@ public class Main
             + "FOREIGN KEY(ownerNo) REFERENCES PrivateOwner(ownerNo),"
             + "FOREIGN KEY(staffNo) REFERENCES Staff(staffNo))";
 
+        //The above SQL statement is executed
         try {
             stmt = con.createStatement();
             stmt.executeUpdate(createPropertyForRent);
@@ -116,6 +130,7 @@ public class Main
             e.printStackTrace();
         }
 
+        //The SQL statement to create the Viewing table with proper relations is prepared
         String createViewing = "CREATE TABLE Viewing("
             + "clientNo VARCHAR(4),"
             + "propertyNo VARCHAR(4),"
@@ -124,6 +139,7 @@ public class Main
             + "PRIMARY KEY(clientNo, propertyNo),"
             + "FOREIGN KEY(clientNo) REFERENCES Client(clientNo))";
 
+        //The above SQL statement is executed
         try {
             stmt = con.createStatement();
             stmt.executeUpdate(createViewing);
@@ -132,14 +148,18 @@ public class Main
                 System.out.println("A database with this name already exists.");
         }
 
+        //Presents the user with a menu
         while(choice != 1)
         {
             System.out.println("Please select an option from the list below. \n 1. Quit \n 2. Query the database \n 3. Insert data \n 4. Delete data \n 5. Check metadata");
             choice = Integer.parseInt(scan.nextLine());
 
             switch (choice) {
+                //Quits the program
                 case 1:
                     break;
+
+                //Asks the user which table they wish to query and what values they want to extract from it. Also asks for a WHERE clause
                 case 2:
                     System.out.println("What table do you wish to query?");
                     table = scan.nextLine();
@@ -147,10 +167,12 @@ public class Main
                     int numOfValues = Integer.parseInt(scan.nextLine());
                     if(numOfValues != 0)
                     {
+                        //Creates an array that stores all variables the user wishes to extract
                         inputValues = new String[numOfValues];
                         System.out.println("What values do you wish to query? Type one value at a time and then push enter. Continue until you have typed all values.");
                         for(int i = 0; i < inputValues.length; i++)
                             inputValues[i] = scan.nextLine();
+                        //Creates a string that is formatted the proper way for SQL
                         for(int i = 0; i < inputValues.length; i++)
                         {
                           if(i < inputValues.length - 1)
@@ -169,12 +191,14 @@ public class Main
                     {
                         System.out.println("Type the conditions for your WHERE clause, excluding the keyword WHERE.");
                         conditions = scan.nextLine();
+                        //The SQL statement is prepared using the input from above
                         query = "SELECT " + values + " FROM " + table + " WHERE " + conditions + ";";
                         System.out.println(query);
                     }
                     else
                         query = "SELECT " + values + " FROM " + table + ";";
 
+                    //The SQL statement is executed. A loop is used to get all of the data that was requested
                     try {
                         stmt = con.createStatement();
                         ResultSet rs = stmt.executeQuery(query);
@@ -191,15 +215,17 @@ public class Main
                     values = "";
                     break;
                 case 3:
+                    //Asks the user for which table they want to insert data into as well as which fields.
                     try {
                         stmt = con.createStatement();
-                        System.out.println("Enter the table you wish to insert data into. (Case sensitive)");
+                        System.out.println("Enter the table you wish to insert data into.");
                         table = scan.nextLine();
-                        System.out.println("Enter all applicable information separated by commas and make sure VARCHAR variables are surrounded by single quotation marks.");
+                        System.out.println("Enter all applicable fields separated by commas and make sure VARCHAR variables are surrounded by single quotation marks.");
                         values = scan.nextLine();
                         query = "INSERT INTO " + table + " VALUES (" + values + ")";
                         stmt.executeUpdate(query);
                     } catch (SQLException e) {
+                        //Error codes are used to determine the cause of the failure and the user is notified
                         if(e.getErrorCode() == MYSQL_DUPLICATE_PK )
                             System.out.println("Insertion fail because a tuple with the same primary key already exists.");
                         else if(e.getErrorCode() == MYSQL_TABLE_DOES_NOT_EXIST)
