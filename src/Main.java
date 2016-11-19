@@ -3,7 +3,7 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.sql.DatabaseMetaData;
 
-
+//Josh Nicholson and Matthew Compton
 public class Main
 {
     public static final int MYSQL_DUPLICATE_PK = 1062;
@@ -158,6 +158,7 @@ public class Main
             switch (choice) {
                 //Quits the program
                 case 1:
+                    System.out.println("Goodbye!");
                     break;
 
                 //Asks the user which table they wish to query and what values they want to extract from it. Also asks for a WHERE clause
@@ -177,7 +178,7 @@ public class Main
                         for(int i = 0; i < inputValues.length; i++)
                         {
                           if(i < inputValues.length - 1)
-                              values += inputValues[i] + " AND ";
+                              values += inputValues[i] + ", ";
                           else
                               values += inputValues[i];
                         }
@@ -236,6 +237,7 @@ public class Main
                         else
                             e.printStackTrace();
                     }
+                    values = "";
                     break;
                 case 4:
                         try {
