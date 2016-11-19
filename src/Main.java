@@ -216,7 +216,7 @@ public class Main
                     values = "";
                     break;
                 case 3:
-                    //Asks the user for which table they want to insert data into as well as which fields.
+                    //Asks the user for which table they want to delete as well as which fields.
                     try {
                         stmt = con.createStatement();
                         System.out.println("Enter the table you wish to insert data into.");
@@ -248,16 +248,16 @@ public class Main
                             System.out.println(" = ");
                             String value = scan.nextLine();
 
-                            query = "DELETE FROM " + table + " WHERE "+column+ "="+ "'" +value+ "'" ; //added those single quotation marks on value so that the user doesn't have to.
-                            stmt.executeUpdate(query);
-                            System.out.println("Deletion Successful \n");
+                            query = "DELETE FROM " + table + " WHERE "+column+ "="+ "'" +value+ "'" ;    //added those single quotation marks on value so that the user doesn't have to.
+                            stmt.executeUpdate(query); //Sends statement query to the db
+                            System.out.println("Deletion Successful \n"); //confirms successful deletion
 
                         } //end try
 
                         catch (SQLException e) {
-                           if (e.getErrorCode() == MySQL_Integrity_Constraint_ViolationException) {
+                           if (e.getErrorCode() == MySQL_Integrity_Constraint_ViolationException) {  //Catches if user is trying to delete a foreign key
 
-                               System.out.println("That is a foreign key, if you would like to delete it type y.");
+                               System.out.println("That is a foreign key, if you would like to delete it type y. Then re-enter your data.");
                                String UserResponse = scan.nextLine();
                                if (UserResponse.equalsIgnoreCase("Y"))
                                {
@@ -295,11 +295,11 @@ public class Main
 
                 case 5:
                         try{
-                            System.out.println("Database Product Name: " + metadata.getDatabaseProductName());
-                            System.out.println("Database Product Version: "+ metadata.getDatabaseProductVersion());
-                            System.out.println("Logged User: " + metadata.getUserName());
-                            System.out.println("JDBC Driver: " + metadata.getDriverName());
-                            System.out.println("Driver Version: " + metadata.getDriverVersion());
+                            System.out.println("Database Product Name: " + metadata.getDatabaseProductName()); //Gets db prod name
+                            System.out.println("Database Product Version: "+ metadata.getDatabaseProductVersion()); //Gets db prod version
+                            System.out.println("Logged User: " + metadata.getUserName()); //gets user name
+                            System.out.println("JDBC Driver: " + metadata.getDriverName()); //gets driver name
+                            System.out.println("Driver Version: " + metadata.getDriverVersion()); //gets driver version
                             System.out.println("\n");
                         }
                         catch(SQLException e)
